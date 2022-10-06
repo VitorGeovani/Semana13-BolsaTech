@@ -1,0 +1,139 @@
+Javascript - Requisições e Assíncronismo
+
+# Anotações (Aula 11) - Fetch com POST
+
+- No segundo parâmetro de uma requisição é inserido alguns itens, sendo eles: method, body, headers;
+- Com o método POST é possível enviar dados através do corpo da requisição;
+- Corpo da requisição são os dados que serão enviados internamente junto com a requisição;
+- O body necessita ser enviado com uma string e com um objeto dentro;
+- Uma requisição com método GET não possui body;
+
+
+# Anotações (Aula 12) - Upload de arquivos com JS
+
+- Nesta aula o objetivo foi trabalhar com upload de arquivos por requisições internas;
+- FileList é um objeto que dentro dele é possível ter vários arquivos;
+- O objeto File é o próprio arquivo;
+- Para fazer um upload, geralmente é feito pelo método POST;
+- Para enviar arquivos é necessário usar a classe FormData();
+
+
+# Anotações (Aula 13) - Thumbnails com JS
+
+- Em posse de um objeto File é possível gerar uma URL através dele;
+- document.createElement(); - cria um elemento;
+- Através do URL.createObjectURL() e de um file dentro dele, será gerado uma URL dentro dele;
+
+
+# Anotações (Aula 14) - Thumbnails com FileReader
+
+- A dois métodos de exibir uma imagem na tela, o primeirto método foi síncrono, e este usando o FileReader é assíncrono;
+- O resultado final é o mesmo, porém o processo de exibição é diferente entre os dois métodos;
+
+-----------------------------------------------------------------------------------------------
+
+Javascript - Projeto Prático Compra de Pizzas
+
+- Neste projeto o objetivo foi fazer um projeto de compra de pizzas, que abrange todos os conhecimentos já adquiridos durante as aulas anteriores, desde os conhecimentos em HTML e CSS (Front-End), aos de JavaScript (Back-End). Neste projeto foram utilizadas imagens, um modal, eventos de click, condicionais, operador ternário, funções, map, e vários outros códigos. O mais importante deles é o JSON que contém todos os sabores de pizza que estão a venda, possibilitando fazer uma união de códigos entre Back-End e Front-End, para que a exibição do produto fosse feita e manipulada pelos clientes;
+
+O projeto completo para teste se encontra hospedado em meu Github: https://vitorgeovani.github.io/projeto-compra-de-pizzas/
+
+-----------------------------------------------------------------------------------------------
+
+Bootstrap 4
+
+# Anotações (Aula 1) - O que é, pra que serve, como baixar
+
+- Bootstrap é uma biblioteca Front-End para responsivisar sistemas e usar componentes já prontos e estilizados;
+- Para acessar, usar por meio de link e até mesmo baixar o Bootstrap, é necessário navegar até: https://getbootstrap.com/
+- Existem duas formas de adicionar o Bootstrap em um projeto: Usando CDN ou baixando um arquivo .zip;
+- bootstrap.grid é responsável pela separação dos conteúdos;
+- O boostrap possui versões legíveis e versões minificadas;
+- Com relação ao JavaScript, o Bootstrap necessita do JQuery;
+
+
+# Anotações (Aula 2) - Estruturando o projeto
+
+- O Bootstrap utiliza HTML5;
+- viewport diz para o navegador as formas como ele precisa renderizar as coisas na tela;
+- O Bootstrap leva CSS e JavaScript;
+- Para carregar o JavaScript mais rápido utilizando Bootstrap, coloca-se o script ao fim do body;
+- JQuery sempre será carregado primeiro;
+
+
+# Anotações (Aula 3) - Usando o Console do Navegador
+
+- No Inspecionar de um navegador é possível ativar a emulação de dispositivos. Com ela é possível simular o uso de um site ou sistema, em um celular ou tablet específico;
+- Com a simulação de dispositivos é possível escolher um dispositivo específico, ou escolher a altura e a largura que quisermos;
+- Há classificações entre os dispositivos, alguns são Mobile M, outros são Mobile S, etc;
+
+
+# Anotações (Aula 4) - Grid - Introdução
+
+- Para inserir conteúdos Boostrap, é recomendado inserí-los dentro de containers;
+- Container é uma div que determina até onde um site vai;
+- A limitação de um container não é fixa;
+- Existem dois tipos de containers no Bootstrap, o container "normal", e o container "fluído";
+- O container-fluid pega de ponta-a-ponta de um site;
+- Grid é uma forma de dividir proporcionalmente todo o conteúdo de um site ou de um sistema;
+- sm possibilita a otimização de um conteúdo para dispositivos móveis;
+- md possibilita a otimização de um conteúdo para dispositivos médios;
+- lg possibilita a otimização de um conteúdo para monitores, televisões, etc;
+
+
+# Anotações (Aula 5) - Grid - Coluna com largura e nova linha
+
+- Uma div com class "w-100" quebra linha;
+- Ao colocar um número numa class col por exemplo, o Bootstrap automaticamente faz a matemática de cálculo dividindo por 12 para chegar ao tamanho escolhido;
+- Ao colocar um número numa coluna, é pré-definido um tamanho fixo para ela;
+- É possível definir tamanho mínimo em uma coluna usando por exemplo: class="col-sm-2"
+
+
+# Anotações (Aula 6) - Grid - Ordenando Colunas
+
+- Para fazer com que uma coluna vá para a posição inicial, usa-se: class="col order-first"
+- Para fazer com que uma coluna vá para a última posição, usa-se: class="col order-last"
+- Para adicionar uma ordem específica em uma coluna, usa-se por exemplo: class="col order-1"
+- Para ordenar todas as colunas é necessário colcoar order em todas;
+
+
+# Anotações (Aula 7) - Grid JustifyContent e AlignItems
+
+- Existe o alinhamento com base na direção de um item, e existe o alinhamento inverso de um item;
+- Para alinhamento e espaçamento horizontalmente, usa-se o justify-content;
+- Para justificar itens no início (esquerda), usa-se class="justify-content-start"
+- Para justificar itens no meio, usa-se: class="justify-content-center"
+- Para justificar itens no fim (direita), usa-se: class="justify-content-end"
+- Para fazer com que os itens se espalhem igualmente, usa-se: class="justify-content-around"
+- Para fazer com que os itens se espalhem entre um e outro, usa-se: class="justify-content-between"
+- Para alinhamento e espaçamento verticalmente, usa-se o align-items;
+- Para alinhar um item verticalmente no início, usa-se: class="align-items-start"
+- Para alinhar um item verticalmente no fim, usa-se: class="align-items-end"
+- Para alinhar um item verticalmente no centro, usa-se: class="align-items-center"
+- É possível combinar um alinhamento central vertical e horizontal usando: class="align-items-center justify-content-center"
+
+
+# Anotações (Aula 8) - Media Component
+
+- list-unstyled tira todos os tipos de listas;
+- align-self aplica as alterações no próprio elemento;
+
+
+# Anotações (Aula 9) - Tipografia
+
+- O Bootstrap já possui as classes h1, h2, h3, h4, entre outras, todas prontas;
+- class="text-muted" deixa o texto um pouco mais acinzentado;
+- class="mark" marca texto com uma cor de fundo;
+- Para alinhar o texto de uma div no centro por exemplo, usa-se: class="text-center"
+- Para deixar um item ao lado do outro dentro de uma lista, usa-se: "list-inline" dentro do <ul> e dentro de cada <li> utiliza-se "list-inline-item";
+
+
+# Anotações (Aula 10) - Imagens
+
+- Para transformar uma imagem em uma imagem adaptável (responsiva), utiliza-se: class="img-fluid"
+- Para transformar uma imagem em miniatura, utiliza-se: class="img-thumbnail"
+- Para deixar uma imagem arredondada, utiliza-se: class="rounded"
+- É possível combinar a responsividade com o arredondamento, utilizando: class="rounded img-fluid"
+- Para mover uma imagem para a direita por exemplo, utiliza-se: class="float-right"
+
+#######################################################################################

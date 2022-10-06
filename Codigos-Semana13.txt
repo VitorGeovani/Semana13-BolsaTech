@@ -1,0 +1,1304 @@
+Javascript - Requisições e Assíncronismo
+
+(Aula 11) - Fetch com POST
+
+#index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+    <button onclick="inserirPost()">Inserir Post</button>
+
+    <div id="posts"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+
+# script.js
+
+async function inserirPost() {
+    document.getElementById("posts").innerHTML = "Carregando...";
+
+    let req = await fetch('http://jsonplaceholder.typicode.com/posts', {
+        method: 'GET',
+        body: JSON.stringify({
+            title: 'Título de teste',
+            body: 'Corpo de teste',
+            userId: 4
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+
+    });
+    let json = await req.json();
+
+    console.log(json);
+
+}
+
+
+(Aula 12) - Upload de arquivos com JS
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+    <input type="file" id="arquivo">
+
+    <button onclick="enviar()">Enviar</button>
+
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
+
+
+# script.js
+
+async function enviar() {
+    let arquivo = document.getElementById('arquivo').files[0];
+
+    let body = new FormData();
+    body.append('title', 'Bla bla bla');
+    body.append('arquivo', arquivo);
+    
+    let req = await fetch('https://www.meusite.com.br/upload', {
+        method: 'POST',
+        body: body,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+
+(Aula 13) - Thumbnails com JS
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+	<input type="file" accept="image/*" id="imagem">
+	<button onclick="mostrar()">Mostrar</button>
+
+	<div id="area"></div>
+
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
+
+
+# script.js
+
+function mostrar() {
+    let imagem = document.getElementById("imagem").files[0];
+
+    let img = document.createElement('img');
+    img.src = URL.createObjectURL(imagem);
+    img.width = 200;
+
+    document.getElementById("area").appendChild(img);
+}
+
+
+(Aula 14) - Thumbnails com FileReader
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+	<input type="file" accept="image/*" id="imagem">
+    <button onclick="mostrar()">Mostrar</button>
+
+    <div id="area"></div>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
+
+
+# script.js
+
+function mostrar() {
+    let reader = new FileReader();
+    let imagem = document.getElementById('imagem').files[0];
+
+    reader.onloadend = function() {
+        let img = document.createElement('img');
+        img.src = reader.result;
+        img.width = 200;
+
+        document.getElementById('area').appendChild(img);
+    }
+
+    reader.readAsDataURL(imagem);
+}
+
+-----------------------------------------------------------------------------------------------
+
+Javascript - Projeto Prático Compra de Pizzas
+
+# index.html
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Pizzaria</title>
+    <meta name="viewport" content="width=device-width, inicial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Hepta+Slab:400,700|Lato:400,700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+</head>
+
+<body>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="models">
+        <div class="pizza-item">
+            <a href="">
+                <div class="pizza-item--img"><img src="" /></div>
+                <div class="pizza-item--add">+</div>
+            </a>
+            <div class="pizza-item--price">R$ --</div>
+            <div class="pizza-item--name">--</div>
+            <div class="pizza-item--desc">--</div>
+        </div>
+        <div class="cart--item">
+            <img src="" />
+            <div class="cart--item-nome">--</div>
+            <div class="cart--item--qtarea">
+                <button class="cart--item-qtmenos">-</button>
+                <div class="cart--item--qt">1</div>
+                <button class="cart--item-qtmais">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÃO MOBILE PARA VISUALIZAÇÃO DO CARRINHO -->
+    <header>
+        <div class="menu-openner"><span>0</span>🛒</div>
+    </header>
+
+    <!-- ÁREA DE EXIBIÇÃO DAS PIZZAS -->
+    <main>
+        <h1>Pizzaria BolsaTech</h1>
+        <div class="pizza-area"></div>
+    </main>
+
+    <!-- CARRINHO DE COMPRAS -->
+    <aside>
+        <div class="cart--area">
+            <div class="menu-closer">❌</div>
+            <h1>Suas Pizzas</h1>
+            <div class="cart"></div>
+            <div class="cart--details">
+                <div class="cart--totalitem subtotal">
+                    <span>Subtotal</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--totalitem taxa">
+                    <span>Taxa de Entrega (10%)</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--totalitem total big">
+                    <span>Total</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--finalizar">Finalizar a compra</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- JANELA PARA INSERÇÃO DA PIZZA NO CARRINHO  -->
+    <div class="pizzaWindowArea">
+        <div class="pizzaWindowBody">
+            <div class="pizzaInfo--cancelMobileButton">Voltar</div>
+            <div class="pizzaBig">
+                <img src="" />
+            </div>
+            <div class="pizzaInfo">
+                <h1>--</h1>
+                <div class="pizzaInfo--desc">--</div>
+                <div class="pizzaInfo--sizearea">
+                    <div class="pizzaInfo--sector">Tamanho</div>
+                    <div class="pizzaInfo--sizes">
+                        <div data-key="0" class="pizzaInfo--size">MASSA 1 <span>--</span></div>
+                        <div data-key="1" class="pizzaInfo--size selected">MASSA 2 <span>--</span></div>
+                        <div data-key="2" class="pizzaInfo--size">MASSA 3 <span>--</span></div>
+                    </div>
+                </div>
+                <div class="pizzaInfo--pricearea">
+                    <div class="pizzaInfo--sector">Preço</div>
+                    <div class="pizzaInfo--price">
+                        <div class="pizzaInfo--actualPrice">R$ --</div>
+                        <div class="pizzaInfo--qtarea">
+                            <button class="pizzaInfo--qtmenos">-</button>
+                            <div class="pizzaInfo--qt">1</div>
+                            <button class="pizzaInfo--qtmais">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="pizzaInfo--addButton">Adicionar ao carrinho</div>
+                <div class="pizzaInfo--cancelButton">Cancelar</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="assets/pizzas.js"></script>
+    <script type="text/javascript" src="assets/script.js"></script>
+
+</body>
+</html>
+
+# pizzas.js
+
+let pizzaJson = [
+    { id: 1, name: 'Tradicional',            img: 'images/pizza.png',  price: 36.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Presunto, Tomates e Mussarela' },
+    { id: 2, name: 'Tomate Seco c/ Rúculas', img: 'images/pizza2.png', price: 49.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Tomate Seco, Mussarela, Rúculas e Azeite de Oliva' },
+    { id: 3, name: 'Siciliana',              img: 'images/pizza3.png', price: 39.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Mussarela, Bacon, Champignom, Pimentões Verdes e Catupiry' },
+    { id: 4, name: 'Brócolis',               img: 'images/pizza4.png', price: 39.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Bacon, Brócolis Regodado, Champignom, Alho, Catupiry E Mussarela' },
+    { id: 5, name: 'Vegetariana',            img: 'images/pizza5.png', price: 36.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Escarola Refogada, Palmito, Milho, Tomates, Azeitonas E Mussarela' },
+    { id: 6, name: 'A Moda',                 img: 'images/pizza6.png', price: 36.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Molho de Tomate, Presunto, Milho, Ervilha, Calabresa, Tomates, Ovos, Azeitonas E Mussarela' },
+    { id: 7, name: 'Confetti',               img: 'images/pizza7.png', price: 44.00, sizes: ['Fina', 'Média', 'Grossa'], description: 'Creme de Leite, Chocolate Preto ou Branco, Fios de Bisnaga de Chocolate e Confetti' }
+];
+
+
+# script.js
+
+const sel = (elemento) => document.querySelector(elemento);
+const selAll = (elemento) => document.querySelectorAll(elemento);
+
+let cart = [];
+let modalQt = 1;
+let modalKey = 0;
+
+pizzaJson.map((item, index) => {    
+    let pizzaItem = sel('.models .pizza-item').cloneNode(true);
+
+    pizzaItem.setAttribute('data-key', index); //definindo index para as pizzas
+
+    //montagem do grid com pizzas
+    pizzaItem.querySelector('.pizza-item--img img').src = item.img;
+    pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.price.toFixed(2)}`;
+    pizzaItem.querySelector('.pizza-item--name').innerHTML = item.name;
+    pizzaItem.querySelector('.pizza-item--desc').innerHTML = item.description;
+
+    //listagem das pizzas
+    pizzaItem.querySelector('a').addEventListener('click', (e) => {
+        
+        e.preventDefault(); // bloqueando ação padrão da tag
+
+        modalQt = 1 // setando o valor 1 novamente ao abrir
+
+        //pegando index da pizza clicada
+        let key = e.target.closest('.pizza-item').getAttribute('data-key');
+        modalKey = key; // Gravando na variável qual o index da pizza selecionada
+
+        //preenchendo modal com as informações da pizza
+        sel('.pizzaBig img').src = pizzaJson[key].img;
+        sel('.pizzaInfo h1').innerHTML = pizzaJson[key].name;
+        sel('.pizzaInfo .pizzaInfo--desc').innerHTML = pizzaJson[key].description;
+        sel('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`;
+
+        sel('.pizzaInfo--size.selected').classList.remove('selected'); 
+        
+        selAll('.pizzaInfo--size').forEach((size, sizeIndex) => {
+            if(sizeIndex == 1) {
+                size.classList.add('selected');
+            }
+
+            size.querySelector('span').innerHTML = pizzaJson[key].sizes[sizeIndex];
+        });
+
+        //colocando a quantidade de pizzas
+        sel('.pizzaInfo--qt').innerHTML = modalQt;
+      
+        // colocando efeito para a abertura do modal
+        sel('.pizzaWindowArea').style.opacity = 0;
+        sel('.pizzaWindowArea').style.display = 'flex';
+        setTimeout(() => { sel('.pizzaWindowArea').style.opacity = 1; });        
+    });
+
+    sel('.pizza-area').append(pizzaItem);
+});
+
+
+// EVENTOS DO MODAL //
+//fechando modal
+function closeModal(){
+    sel('.pizzaWindowArea').style.opacity = 0;
+    setTimeout( () => {
+        sel('.pizzaWindowArea').style.display = 'none';    
+    }, 500);
+};
+
+selAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{
+    item.addEventListener('click', closeModal);
+});
+
+//alterando as quantidades
+sel('.pizzaInfo--qtmenos').addEventListener('click', () => {
+    //verificando se quantidade de pizzas é maior que 1 para fazer redução
+    if(modalQt > 1) {
+        modalQt--; 
+        sel('.pizzaInfo--qt').innerHTML = modalQt; //colocando a quantidade de pizzas      
+    }
+    
+});
+sel('.pizzaInfo--qtmais').addEventListener('click', () => {
+    modalQt++;
+    sel('.pizzaInfo--qt').innerHTML = modalQt; //colocando a quantidade de pizzas      
+});
+
+//selecionando espessura da massa
+selAll('.pizzaInfo--size').forEach((size, sizeIndex) => {
+    size.addEventListener('click', (e) => {
+        sel('.pizzaInfo--size.selected').classList.remove('selected');
+        size.classList.add('selected');
+    });
+});
+
+//adicionando ao carrinho de compras
+sel('.pizzaInfo--addButton').addEventListener('click',  () => {
+    let size = parseInt(sel('.pizzaInfo--size.selected').getAttribute('data-key'));
+
+    //criando identificador de sabor e tamanho
+    let identfier = pizzaJson[ modalKey ].id + '@' + size;
+
+    //verificando se ja existe pizza com mesmo identificador no array
+    let key = cart.findIndex((item) => item.identfier == identfier);
+    if (key > -1) { //-1 significa retorno vazio
+        //aumentando a quantidade do item encontrado
+        cart[key].qt += modalQt;
+    } else {
+        //adicionando novo item
+        cart.push({
+            identfier,
+            id : pizzaJson[ modalKey ].id,
+            size,
+            qt : modalQt
+        });
+    }    
+
+    closeModal();
+    updateCart();
+    
+});
+
+// AÇÕES NO MENU MOBILE //
+sel('.menu-openner').addEventListener('click', () => {
+    if (cart.length > 0) {
+        sel('aside').style.left = '0';
+    }
+});
+sel('.menu-closer').addEventListener('click', () => {
+    sel('aside').style.left = '100vw';
+});
+
+
+// AÇÕES DO CARRINHO DE COMPRAS //
+//funcão de atualização
+function updateCart(){
+    sel('.menu-openner span').innerHTML = cart.length; //contador de itens no menu mobile
+
+    if (cart.length > 0) {
+        sel('aside').classList.add('show'); //adiciona class que exibe o carrinho
+
+        sel('.cart').innerHTML = ''; //limpa a sessão do carrinho para evitar replicações
+
+        //variaveis de compra
+        let subtotal = 0;
+        let taxa = 0;
+        let total = 0;
+
+        //buscando informações da pizza
+        for(let i in cart) {
+            let pizzaItem = pizzaJson.find((item)=>item.id == cart[i].id); //encontrando pizza no Json e coletando informações
+
+            subtotal += pizzaItem.price * cart[i].qt; //calculando o subtotal
+            
+            let cartItem = sel('.models .cart--item').cloneNode(true); //clonando elementos do HTML
+            
+            //concatenando os nomes com as tipos de massas
+            let pizzaSizeName;
+            switch ( cart[i].size ) {
+                case 0 :
+                    pizzaSizeName = 'F'; break;
+                case 1 :
+                    pizzaSizeName = 'M'; break;
+                case 2 :
+                    pizzaSizeName = 'G'; break;
+            }
+            let pizzaName = `${ pizzaItem.name } (${ pizzaSizeName })`;
+            
+            //preenchendo informações
+            cartItem.querySelector('img').src = pizzaItem.img;
+            cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName;
+            cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
+            //colocando ações para alterar as quantidades no carrinho
+            cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', () => {
+                if ( cart[i].qt > 1 ) {
+                    cart[i].qt--; //diminui a quantidade no carrinho
+                } else {
+                    cart.splice(i,1); //remove se menor do que 1
+                }    
+                updateCart();
+            });
+            cartItem.querySelector('.cart--item-qtmais').addEventListener('click', () => {
+                cart[i].qt++; //aumentando quantidades
+                updateCart(); //atualizando o carrinho
+            });
+
+            sel('.cart').append(cartItem);
+        }
+
+        taxa = subtotal * 0.1; //pegando os 10%
+        total = subtotal + taxa; //calculando o total
+
+        //exibindo valores no carrinho
+        sel('.subtotal span:last-child').innerHTML = `R$ ${ subtotal.toFixed(2) }`;
+        sel('.taxa span:last-child').innerHTML = `R$ ${ taxa.toFixed(2) }`;
+        sel('.total span:last-child').innerHTML = `R$ ${ total.toFixed(2) }`;
+
+    } else {
+        sel('aside').classList.remove('show'); //fechando carrinho de compras da tela
+        sel('aside').style.left = '100vw'; //fechando carrinho de compras tela mobile
+    }
+}
+
+
+# style.css
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #EEE;
+    font-family: 'Lato', Helvetica, Arial;
+    font-size: 15px;
+    display: flex;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.models {
+    display: none;
+}
+
+header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 60px;
+    background-color: #399ade;
+    display: none;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.menu-openner {
+    margin-right: 15px;
+    font-size: 26px;
+    background-color: #a9dcff;
+    padding: 5px 20px;
+    border-radius: 5px;
+}
+
+.menu-openner span {
+    margin-right: 10px;
+}
+
+.menu-closer {
+    width: 32px;
+    height: 32px;
+    display: none;
+    font-size: 30px;
+}
+
+aside {
+    background-color: #9ccbe6;
+    width: 0vw;
+    font-family: 'Hepta Slab', Helvetica, Arial;
+    transition: all ease .2s;
+    overflow-x: hidden;
+}
+
+aside.show {
+    width: 30vw;
+}
+
+.cart--area {
+    padding: 20px;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
+h1 {
+    font-family: 'Hepta Slab', Helvetica, Arial;
+}
+
+.pizza-area {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.pizza-item {
+    text-align: center;
+    max-width: 250px;
+    font-family: 'Hepta Slab', Helvetica, Arial;
+    margin: 0 auto 50px auto;
+}
+
+.pizza-item a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+.pizza-item--img {
+    width: 200px;
+    height: 200px;
+    background-color: #EEE;
+    border-radius: 100px;
+    box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.2);
+}
+
+.pizza-item--img img {
+    width: 100%;
+    height: auto;
+}
+
+.pizza-item--add {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #388bc5;
+    text-align: center;
+    color: #FFF;
+    font-size: 22px;
+    cursor: pointer;
+    margin-top: -25px;
+    transition: all ease .2s;
+}
+
+.pizza-item a:hover .pizza-item--add {
+    background-color: #244c88;
+}
+
+.pizza-item--price {
+    font-size: 15px;
+    color: #333;
+    margin-top: 5px;
+}
+
+.pizza-item--name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 5px;
+}
+
+.pizza-item--desc {
+    font-size: 13px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.pizzaWindowArea {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all ease .5s;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    display: none;
+}
+
+.pizzaWindowBody {
+    width: 900px;
+    background-color: #FFF;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px #999;
+    display: flex;
+    margin: 20px 0px;
+}
+
+.pizzaBig {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pizzaBig--back {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #000;
+}
+
+.pizzaBig img {
+    height: 400px;
+    width: auto;
+}
+
+.pizzaInfo {
+    flex: 1;
+    font-family: 'Hepta Slab', Helvetica, Arial;
+    padding-bottom: 50px;
+}
+
+.pizzaInfo h1 {
+    margin-top: 50px;
+}
+
+.pizzaInfo .pizzaInfo--desc {
+    font-size: 15px;
+    color: #999;
+    margin-top: 10px;
+    font-family: 'Lato', Helvetica, Arial;
+}
+
+.pizzaInfo--sector {
+    color: #CCC;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.pizzaInfo--sizes {
+    display: inline-flex;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pizzaInfo--size {
+    padding: 10px 15px;
+    color: #000;
+    background-color: #EEE;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pizzaInfo--size:hover {
+    background-color: #CCC;
+}
+
+.pizzaInfo--size.selected {
+    background-color: #399ade;
+    color: #FFF;
+}
+
+.pizzaInfo--size.selected span {
+    color: #D6D6D6;
+}
+
+.pizzaInfo--size span {
+    font-size: 12px;
+    color: #999;
+    font-weight: normal;
+}
+
+.pizzaInfo--price {
+    display: flex;
+    align-items: center;
+}
+
+.pizzaInfo--actualPrice {
+    font-size: 28px;
+    margin-right: 30px;
+}
+
+.pizzaInfo--qtarea {
+    display: inline-flex;
+    background-color: #EEE;
+    border-radius: 10px;
+    height: 30px;
+}
+
+.pizzaInfo--qtarea button {
+    border: 0;
+    background-color: transparent;
+    font-size: 17px;
+    outline: 0;
+    cursor: pointer;
+    padding: 0px 10px;
+    color: #333;
+}
+
+.pizzaInfo--qt {
+    line-height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0px 5px;
+    color: #000;
+}
+
+.pizzaInfo--addButton {
+    margin-top: 30px;
+    padding: 20px 30px;
+    border-radius: 20px;
+    background-color: #48d05f;
+    color: #FFF;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.pizzaInfo--addButton:hover {
+    background-color: #32a345;
+}
+
+.pizzaInfo--cancelButton {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.pizzaInfo--cancelMobileButton {
+    display: none;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    margin-bottom: 30px;
+}
+
+.cart {
+    margin-bottom: 20px;
+}
+
+.cart--item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.cart--item img {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.cart--item-nome {
+    flex: 1;
+}
+
+.cart--item--qtarea {
+    display: inline-flex;
+    background-color: #EEE;
+    border-radius: 10px;
+    height: 30px;
+}
+
+.cart--item--qtarea button {
+    border: 0;
+    background-color: transparent;
+    font-size: 17px;
+    outline: 0;
+    cursor: pointer;
+    padding: 0px 10px;
+    color: #333;
+}
+
+.cart--item--qt {
+    line-height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0px 5px;
+    color: #000;
+}
+
+.cart--totalitem {
+    padding: 15px 0;
+    border-top: 1px solid #79b9dd;
+    color: #315970;
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+}
+
+.cart--totalitem span:first-child {
+    font-weight: bold;
+}
+
+.cart--totalitem.big {
+    font-size: 20px;
+    color: #000;
+    font-weight: bold;
+}
+
+.cart--finalizar {
+    padding: 20px 30px;
+    border-radius: 20px;
+    background-color: #48d05f;
+    color: #FFF;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+    border: 2px solid #63f77c;
+    transition: all ease .2s;
+}
+
+.cart--finalizar:hover {
+    background-color: #35af4a;
+}
+
+@media (max-width:1000px) {
+    .pizza-area {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:840px) {
+    body {
+        flex-direction: column;
+    }
+    .pizza-area {
+        display: block;
+    }
+    .pizza-item {
+        max-width: 100%;
+    }
+    header {
+        display: flex;
+    }
+    main {
+        padding-top: 60px;
+    }
+    aside {
+        width: auto;
+        position: fixed;
+        left: 100vw;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        transition: all ease .2s;
+    }
+    aside.show {
+        width: auto;
+    }
+    .cart--area {
+        width: 100vw;
+    }
+    .menu-closer {
+        display: block;
+    }
+    .pizzaWindowArea {
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .pizzaWindowBody {
+        width: 100vw;
+        display: block;
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+    }
+    .pizzaBig img {
+        width: 75%;
+        height: auto;
+    }
+    .pizzaInfo h1 {
+        margin-top: 20px;
+    }
+    .pizzaInfo--qtarea {
+        height: 60px;
+    }
+    .pizzaInfo--qtarea button {
+        font-size: 25px;
+        padding: 0px 25px;
+    }
+    .pizzaInfo--qt {
+        line-height: 60px;
+        font-size: 20px;
+    }
+    .pizzaInfo--addButton {
+        font-size: 20px;
+        display: block;
+        text-align: center;
+        margin: 30px auto;
+    }
+    .pizzaInfo--cancelButton {
+        display: none;
+    }
+    .pizzaInfo--cancelMobileButton {
+        display: block;
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+
+Bootstrap 4
+
+(Aula 2) - Estruturando o projeto
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 3) - Usando o Console do Navegador
+
+# index.html
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 4) - Grid - Introdução
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" style="background-color:#FF0000">...</div>
+            <div class="col-md" style="background-color:#00FF00">...</div>
+            <div class="col-lg" style="background-color:#FF0000">...</div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 5) - Grid - Coluna com largura e nova linha
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+</head>
+<body>
+   <div class="container">
+        <div class="row">
+            <div class="col-sm">...</div>
+            <div class="col">...</div>
+            <div class="col-2">...</div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 6) - Grid - Ordenando Colunas
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+    <style type="text/css">
+        .row [class^=col-], .row .col {
+            background-color:#DDD;
+            border:1px solid #CCC;
+        }
+        .row {
+            background-color:#FF9999;
+            padding:10px;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+	        <div class="row">
+	            <div class="col">Primeira</div>
+	            <div class="col">Segunda</div>
+	            <div class="col">Terceira</div>
+	            <div class="col order-first">Quarta</div>
+	            <div class="col">Quinta</div>
+	        </div>
+	    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 7) - Grid JustifyContent e AlignItems
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+    <style type="text/css">
+        .row [class^=col-], .row .col {
+            background-color:#DDD;
+            border:1px solid #CCC;
+            height:50px;
+        }
+        .row {
+            background-color:#FF9999;
+            padding:10px;
+            height:500px;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+        <div class="row-align-items-center justify-content-center">
+            <div class="col-3">Primeira</div>
+            <div class="col-3">Segunda</div>
+            <div class="col-3">Terceira</div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 8) - Media Component
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+    <style type="text/css">
+        .avatar {
+            width:50px;
+            height:50px;
+        }
+        .media {
+            background-color:#EEEEEE;
+            border-bottom:1px solid #CCC;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+
+        <ul class="list-unstyled">
+            <li class="media">
+                <img src="corujinha.jpg" class="mr-3 avatar align-self-start">
+                <div class="media-body">
+                    <h5>Algum tipo de título</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac magna condimentum, bibendum ligula nec, ullamcorper arcu. Sed nunc arcu, fringilla sed nibh a, dictum venenatis urna. Fusce finibus sapien urna. Nam ligula orci, condimentum eget aliquet ut, elementum aliquam nisl. Fusce enim risus, laoreet accumsan luctus ut, pellentesque ac libero. Sed semper risus et est imperdiet faucibus. Maecenas congue hendrerit eros. In congue est ligula, non dapibus purus mollis non. Nullam efficitur placerat nulla imperdiet commodo. Morbi id dui vestibulum, luctus orci et, consectetur ex. Aenean luctus suscipit tortor, laoreet lacinia leo ullamcorper quis. Morbi suscipit interdum rhoncus. Donec erat ligula, tincidunt ut rhoncus in, consectetur vel purus. Donec vel nisl libero. Vivamus dictum dignissim nisi, tincidunt ornare dolor suscipit non.</p>
+                </div>
+            </li>
+            <li class="media">
+                <img src="corujinha.jpg" class="mr-3 avatar">
+                <div class="media-body">
+                    <h5>Algum tipo de título</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac magna condimentum, bibendum ligula nec, ullamcorper arcu. Sed nunc arcu, fringilla sed nibh a, dictum venenatis urna. Fusce finibus sapien urna. Nam ligula orci, condimentum eget aliquet ut, elementum aliquam nisl. Fusce enim risus, laoreet accumsan luctus ut, pellentesque ac libero. Sed semper risus et est imperdiet faucibus. Maecenas congue hendrerit eros. In congue est ligula, non dapibus purus mollis non. Nullam efficitur placerat nulla imperdiet commodo. Morbi id dui vestibulum, luctus orci et, consectetur ex. Aenean luctus suscipit tortor, laoreet lacinia leo ullamcorper quis. Morbi suscipit interdum rhoncus. Donec erat ligula, tincidunt ut rhoncus in, consectetur vel purus. Donec vel nisl libero. Vivamus dictum dignissim nisi, tincidunt ornare dolor suscipit non.</p>
+                </div>
+            </li>
+            <li class="media">
+                <img src="corujinha.jpg" class="mr-3 avatar">
+                <div class="media-body">
+                    <h5>Algum tipo de título</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac magna condimentum, bibendum ligula nec, ullamcorper arcu. Sed nunc arcu, fringilla sed nibh a, dictum venenatis urna. Fusce finibus sapien urna. Nam ligula orci, condimentum eget aliquet ut, elementum aliquam nisl. Fusce enim risus, laoreet accumsan luctus ut, pellentesque ac libero. Sed semper risus et est imperdiet faucibus. Maecenas congue hendrerit eros. In congue est ligula, non dapibus purus mollis non. Nullam efficitur placerat nulla imperdiet commodo. Morbi id dui vestibulum, luctus orci et, consectetur ex. Aenean luctus suscipit tortor, laoreet lacinia leo ullamcorper quis. Morbi suscipit interdum rhoncus. Donec erat ligula, tincidunt ut rhoncus in, consectetur vel purus. Donec vel nisl libero. Vivamus dictum dignissim nisi, tincidunt ornare dolor suscipit non.</p>
+                </div>
+            </li>
+        </ul>
+
+        
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 9) - Tipografia
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+    <style type="text/css">
+        .teste {
+            width:300px;
+            height:300px;
+            border:1px solid #000;
+        }
+    </style>
+</head>
+<body>
+	<div class="container">
+        <ul class="list-inline">
+            <li class="list-inline-item">Item 1</li>
+            <li class="list-inline-item">Item 2</li>
+            <li class="list-inline-item">Item 3</li>
+        </ul>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+(Aula 10) - Imagens
+
+# index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Projeto Bootstrap 4</title>
+    <style type="text/css">
+        .teste {
+            width:300px;
+            height:300px;
+            border:1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <figure class="figure">
+            <img src="corujinha.jpg" class="figure-img">
+            <figcaption class="figure-caption">Vitor Silva</figcaption>
+        </figure>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+#######################################################################################
